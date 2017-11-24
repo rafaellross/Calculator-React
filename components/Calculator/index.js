@@ -12,7 +12,7 @@ class Calculator extends Component {
 
 	constructor(props){
 		super(props);
-		this.state = {display : ""};
+		this.state = {display : "0"};
 		this.state = {current : ""};
 		this.state = {last : ""};
 
@@ -22,39 +22,23 @@ class Calculator extends Component {
 		let operators = ['+', '-', 'x', '/'];
 		let decimalAdded = false;
 		this.setState(previousState => {
-			if (value === 'C') {
-				decimalAdded = false;
-				return { display: "", last: "" };						
-
+			if(value == 'C') {
+				return {display: '0'};
+			}
+			else if(Number.isInteger(value) && value > 0){				
+				if (previousState.display == '0') {
+					return {display: value.toString()};	
+				}
+				else {
+					return {display: (previousState.display || "") + value};
+				}
+				
 			} 
-			else if(operators.indexOf(value) > -1) {
-				let lastChar = previousState.display.slice(-1);
-				if(previousState.display != '' && operators.indexOf(lastChar) == -1) {
-					return { display: (previousState.display  || "") + value};		
-				} 
-				else if(previousState.display == '' && value == '-') {
-					return { display: (previousState.display  || "") + value};		
-				}
-				if(operators.indexOf(lastChar) > -1 && previousState.display.length > 1) {
-					// Here, '.' matches any character while $ denotes the end of string, so anything (will be an operator in this case) at the end of string will get replaced by new operator
-					input.innerHTML = inputVal.replace(/.$/, btnVal);
-					return { display: previousState.display.replace(/.$/, value)};		
-				}
-				decimalAdded = false;
+			else if (value === 0){
+				
 			}
-			else if(value == '.'){
-				if(!decimalAdded) {					
-					decimalAdded = true;
-					return { display: (previousState.display  || "") + value};		
-				}
-					
-			}
-			else {
-				return { display: (previousState.display  || "") + value};		
-			}
-
-	});
-}
+		});
+	}
 	
 
 	_calculate(){
